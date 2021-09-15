@@ -41,6 +41,19 @@ function Table(){
         settasks(newtasks);
     };
 
+
+    //deleting a row
+    const [deleteConfirm, setdeleteConfirm] = useState(false);
+
+    const handledelete = (taskid) =>{
+        const newformdata = [...tasks];
+        const index= tasks.findIndex((task)=>task.id ===taskid);
+
+        newformdata.splice(index,1);
+        settasks(newformdata);
+        setdeleteConfirm(false);
+    }
+
     //adding model
     const [isOpen, setIsOpen] = useState(false);
 
@@ -66,7 +79,7 @@ function Table(){
                         <td>{task.date}</td>
                         <td>{task.task}</td>
                         <td>{task.status}</td>
-                        <td><Button>Delete</Button>  <Button>Update</Button></td>
+                        <td><Button onClick={()=>handledelete(task.id)}>Delete</Button>  <Button onClick={()=>setIsOpen(true)}>Update</Button></td>
                     </tr>
                     ))}
                 </tbody>
@@ -106,6 +119,49 @@ function Table(){
                <Button onClick={handleaddsubmit}>Save</Button>
             </Modal.Footer>
         </Modal>
+
+
+        <Modal show={isOpen} onHide={()=>setIsOpen(false)}>
+            <Modal.Header>
+                <Modal.Title>Add a new Task</Modal.Title>
+                <Button onClick={()=>setIsOpen(false)}>
+                    <span aria-hidden="true">&times;</span>
+                </Button>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                   <label>Date</label><br/>
+                   <input type="date" name="date" placeholder="Enter the date" required /><br/><br/>
+                   <label>Task</label><br/>
+                   <input type="text" name="task" placeholder="Enter the task" required /><br/><br/>
+                   <label>Status</label><br/>
+                   <input type="text" name="status" placeholder="Enter the status" required/><br/><br/>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+               <Button onClick={()=>setIsOpen(false)}>Cancel</Button>
+               <Button >Save Changes</Button>
+            </Modal.Footer>
+        </Modal>
+
+
+        <Modal show={deleteConfirm} onHide={()=>setdeleteConfirm(false)}>
+            <Modal.Header>
+                <Modal.Title>Delete Confirmation</Modal.Title>
+                <Button onClick={()=>setdeleteConfirm(false)}>
+                    <span aria-hidden="true">&times;</span>
+                </Button>
+            </Modal.Header>
+            <Modal.Body>
+                <h6>Are you sure you want to delete this row ?</h6>
+            </Modal.Body>
+            <Modal.Footer>
+               <Button onClick={()=>setdeleteConfirm(false)}>No</Button>
+               <Button  >Yes</Button>
+            </Modal.Footer>
+        </Modal>
+
+      
         </>
     )
 }
